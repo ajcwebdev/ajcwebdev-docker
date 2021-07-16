@@ -62,10 +62,6 @@ You'll need to build a Docker image of your app to run this app inside a Docker 
 
 ### Dockerfile
 
-```bash
-touch Dockerfile
-```
-
 Docker can build images automatically by reading the instructions from a [`Dockerfile`](https://docs.docker.com/engine/reference/builder/). A `Dockerfile` is a text document that contains all the commands a user could call on the command line to assemble an image. Using `docker build` users can create an automated build that executes several command-line instructions in succession.
 
 ### FROM
