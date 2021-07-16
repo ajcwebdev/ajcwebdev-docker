@@ -72,6 +72,14 @@ FROM node:14-alpine
 
 The `FROM` instruction initializes a new build stage and sets the Base Image for subsequent instructions. A valid `Dockerfile` must start with `FROM`. The first thing we need to do is define from what image we want to build from. We will use version `14-alpine` of `node` available from [Docker Hub](https://hub.docker.com/_/node) because the universe is chaos and you have to pick something so you might as well pick something with a smaller memory footprint.
 
+### LABEL
+
+```dockerfile
+LABEL org.opencontainers.image.source https://github.com/ajcwebdev/ajcwebdev-docker
+```
+
+The `LABEL` instruction is a key-value pair that adds metadata to an image.
+
 ### WORKDIR
 
 ```dockerfile
