@@ -290,4 +290,4 @@ To test that our project has a docker image published to a public registry, pull
 docker pull ghcr.io/ajcwebdev/ajcwebdev-docker
 ```
 
-You can view this published container [on my GitHub](https://github.com/ajcwebdev/ajcwebdev-docker/pkgs/container/ajcwebdev-docker).
+You can view this published container [on my GitHub](https://github.com/users/ajcwebdev/packages/container/package/ajcwebdev-docker).
