@@ -58,7 +58,7 @@ node index.js
 
 ## 2. Container image
 
-You'll need to build a Docker image of your app to run this app inside a Docker container using the official Docker image. We will need two files: `dockerfile` and `.dockerignore`.
+You'll need to build a Docker image of your app to run this app inside a Docker container using the official Docker image. We will need two files: `Dockerfile` and `.dockerignore`.
 
 ### Dockerfile
 
@@ -66,60 +66,74 @@ Docker can build images automatically by reading the instructions from a [`Docke
 
 ### FROM
 
+The `FROM` instruction initializes a new build stage and sets the Base Image for subsequent instructions. A valid `Dockerfile` must start with `FROM`.
+
 ```dockerfile
 FROM node:14-alpine
 ```
 
-The `FROM` instruction initializes a new build stage and sets the Base Image for subsequent instructions. A valid `Dockerfile` must start with `FROM`. The first thing we need to do is define from what image we want to build from. We will use version `14-alpine` of `node` available from [Docker Hub](https://hub.docker.com/_/node) because the universe is chaos and you have to pick something so you might as well pick something with a smaller memory footprint.
+The first thing we need to do is define from what image we want to build from. We will use version `14-alpine` of `node` available from [Docker Hub](https://hub.docker.com/_/node) because the universe is chaos and you have to pick something so you might as well pick something with a smaller memory footprint.
 
 ### LABEL
+
+The `LABEL` instruction is a key-value pair that adds metadata to an image.
 
 ```dockerfile
 LABEL org.opencontainers.image.source https://github.com/ajcwebdev/ajcwebdev-docker
 ```
 
-The `LABEL` instruction is a key-value pair that adds metadata to an image.
+We provide our URL to get source code for building the image with [org.opencontainers.image.source](https://github.com/opencontainers/image-spec).
 
 ### WORKDIR
+
+The `WORKDIR` instruction sets the working directory for your application to hold the application code inside the image. 
 
 ```dockerfile
 WORKDIR /usr/src/app
 ```
 
-The `WORKDIR` instruction sets the working directory for your application to hold the application code inside the image. 
+Our working directory is set to `/usr/src/app`.
 
 ### COPY
+
+The `COPY` instruction copies new files or directories from `<src>`. The `COPY` instruction bundles your app's source code inside the Docker image and adds them to the filesystem of the container at the path `<dest>`.
 
 ```dockerfile
 COPY package*.json ./
 ```
 
-This image comes with Node.js and NPM already installed so the next thing we need to do is to install your app dependencies using the `npm` binary. The `COPY` instruction copies new files or directories from `<src>`. The `COPY` instruction bundles your app's source code inside the Docker image and adds them to the filesystem of the container at the path `<dest>`.
+This image comes with Node.js and NPM already installed so the next thing we need to do is to install your app dependencies using the `npm` binary.
 
 ### RUN
+
+The `RUN` instruction will execute any commands in a new layer on top of the current image and commit the results. The resulting committed image will be used for the next step in the `Dockerfile`.
 
 ```dockerfile
 RUN npm i
 COPY . ./
 ```
 
-The `RUN` instruction will execute any commands in a new layer on top of the current image and commit the results. The resulting committed image will be used for the next step in the `Dockerfile`. Rather than copying the entire working directory, we are only copying the `package.json` file. This allows us to take advantage of cached Docker layers.
+Rather than copying the entire working directory, we are only copying the `package.json` file. This allows us to take advantage of cached Docker layers.
 
 ### EXPOSE
+
+The `EXPOSE` instruction informs Docker that the container listens on the specified network ports at runtime.
 
 ```dockerfile
 EXPOSE 8080
 ```
 
-The `EXPOSE` instruction informs Docker that the container listens on the specified network ports at runtime. Your app binds to port `8080` so you'll use the `EXPOSE` instruction to have it mapped by the `docker` daemon.
+Your app binds to port `8080` so you'll use the `EXPOSE` instruction to have it mapped by the `docker` daemon.
 
 ### CMD
+
+Define the command to run your app using `CMD` which defines your runtime. The main purpose of a `CMD` is to provide defaults for an executing container.
 
 ```dockerfile
 CMD ["node", "index.js"]
 ```
 
-Define the command to run your app using `CMD` which defines your runtime. The main purpose of a `CMD` is to provide defaults for an executing container. Here we will use `node index.js` to start your server.
+Here we will use `node index.js` to start your server.
 
 ### Complete Dockerfile
 
@@ -127,6 +141,7 @@ Your `Dockerfile` should now look like this:
 
 ```dockerfile
 FROM node:14-alpine
+LABEL org.opencontainers.image.source https://github.com/ajcwebdev/ajcwebdev-docker
 WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm i
@@ -137,7 +152,7 @@ CMD [ "node", "index.js" ]
 
 ### .dockerignore
 
-Before the docker CLI sends the context to the docker daemon, it looks for a file named `.dockerignore` in the root directory of the context. Create a `.dockerignore` file in the same directory as your `Dockerfile`. If this file exists, the CLI modifies the context to exclude files and directories that match patterns in it. This helps avoid sending large or sensitive files and directories to the daemon.
+Before the Docker CLI sends the context to the docker daemon, it looks for a file named `.dockerignore` in the root directory of the context. Create a `.dockerignore` file in the same directory as your `Dockerfile`. If this file exists, the CLI modifies the context to exclude files and directories that match patterns in it. This helps avoid sending large or sensitive files and directories to the daemon.
 
 ```
 node_modules
