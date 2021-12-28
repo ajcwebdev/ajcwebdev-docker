@@ -29,7 +29,7 @@
 
 ## Node project with an Express server
 
-We have a simple Node application with Express that returns an HTML fragment.
+We have a boilerplate Node application with Express that returns an HTML fragment.
 
 ```javascript
 // index.js
