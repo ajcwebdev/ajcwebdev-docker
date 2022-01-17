@@ -20,7 +20,8 @@
           "startCommand": "node index.js",
           "envVariables": {
             "APP_ENV": "production"
-          }
+          },
+          "port": 8080
         }
       ]
     }
